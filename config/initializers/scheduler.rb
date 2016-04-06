@@ -6,7 +6,7 @@
     
     scheduler.every '5m' do
         res = HTTParty.get(ENV['WEATHER_API'])
-
+        if res['current_observation']['wind_mph'] > 4
             @res = res
             weather = Condition.create(
                 weather: res['current_observation']['weather'],
@@ -21,7 +21,7 @@
                 observation_time: res['current_observation']['observation_time']
             )
             UserNotifier.send_signup_email(res).deliver_now
-
+        end
             # mail = SendGrid::Mail.new do |m|
             #     m.to = 'kevin@titanhomesllc.com'
             #     m.from = 'kevinkorte15@gmail.com'
