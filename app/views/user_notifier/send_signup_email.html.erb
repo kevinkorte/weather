@@ -4,8 +4,8 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <h1>Thanks for signing up, <%= @user %>!</h1>
-    <p><%= @res['current_observation']['observation_time'] %></p>
-    
+    <img src="<%= @res['current_observation']['icon_url'] %>">
+    <p>Weather conditions <%= @res['current_observation']['observation_time'] %> show wind <%= @res['current_observation']['wind_string'] %></p>
+    <p><%= @res['current_observation']['temp_f'] %> - Feels like <%= res['current_observation']['feelslike_f'] %></p>
   </body>
 </html>
