@@ -1,0 +1,18 @@
+<h1>Splash page for internal Weather Email API</h1>
+
+<table>
+    <tbody>
+        <% @conditions.each do |c| %>
+        <tr>
+            <td><img src="<%= c.icon_url %>"></td>
+            <td><%= c.weather %></td>
+            <td><%= c.wind_string %></td>
+            <td><%= c.temp_f %> - Feels like <%= c.feelslike_f %></td>
+            <td><%= c.observation_time %></td>
+        </tr>
+        <% end %>
+    </tbody>
+    
+</table>
+
+    
