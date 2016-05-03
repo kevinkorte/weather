@@ -24,6 +24,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'rufus-scheduler', '~> 3.2'
 gem 'json', '~> 1.8', '>= 1.8.3'
 gem 'httparty', '~> 0.13.7'
+gem 'sendgrid', '~> 1.2', '>= 1.2.4'
 gem 'sendgrid-ruby', '~> 1.1', '>= 1.1.6'
 
 # Use ActiveModel has_secure_password
