@@ -1,3 +1,66 @@
 // Place all the styles related to the welcome controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+body { font-family: 'Source Sans Pro', sans-serif; }
+h1 { text-align: center}
+li {
+	list-style: none;
+	padding: 6px 8px;
+	border-top: 1px solid #D6DEE4;
+	max-width: 980px;
+	margin: 0 auto;
+}
+li.suppressed {
+	background: #E8EFF5;
+}
+.forecast {
+	text-align: center;
+	text-transform: capitalize;
+	padding-top: 9px;
+	font-weight: 300;
+	color: #375065;
+	& span {
+		border: 1px solid #D2DDE6;
+		padding: 6px 15px;
+		border-radius: 6px
+	}
+}
+.flex {
+	display: flex;
+
+}
+.icon {
+	padding-right: 8px;
+}
+.weather-description-container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+.weather-string,
+.temperature-string {
+	color: #777A7D;
+}
+.forecasted.weather-string {
+	font-weight: bold;
+	color: #1E89BF;
+}
+.weather {
+	font-size: 12px;
+	font-style: italic;
+}
+.observed-time {
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-end;
+	color: #9CA9B5;
+	font-weight: 300;
+	font-style: italic;
+}
+.supressed {
+	color: #F98383;
+}
+.sent {
+	color: #63B33D;
+}

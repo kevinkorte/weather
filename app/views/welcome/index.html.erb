@@ -1,18 +1,47 @@
-<h1>Splash page for internal Weather Email API</h1>
+<h1>Titan Homes Wind Tracker</h1>
 
-<table>
-    <tbody>
-        <% @conditions.each do |c| %>
-        <tr>
-            <td><img src="<%= c.icon_url %>"></td>
-            <td><%= c.weather %></td>
-            <td><%= c.wind_string %></td>
-            <td><%= c.temp_f %> - Feels like <%= c.feelslike_f %></td>
-            <td><%= c.observation_time %></td>
-        </tr>
-        <% end %>
-    </tbody>
+<ul>
+    <% @conditions.each do |c| %>
+    <% if c.sent =="False" %>
+    <li class="suppressed">
+    <% else %>
+    <li>
+    <% end %>
+    <div class="forecast"><span><%= c.forecast %> Weather</span></div>
+    <div class="flex">
+        <div class="icon">
+            <img src="<%= c.icon_url %>">
+        </div>
+        <div class="weather-description-container">
+            <div class="center">
+                <div class="weather"><%= c.weather %></div>
+                <%if c.forecast == "Forecasted" %>
+                    <div class="forecasted weather-string"><%= c.wind_string %></div>
+                <% else %>
+                    <div class="weather-string"><%= c.wind_string %></div>
+                <% end %>
+                
+                <% if c.forecast == "Current" %>
+                <div class="temperature-string"><%= c.temp_f %> and feels like <%= c.feelslike_f %></div>
+                <% end %>
+            </div>
+            <% if c.sent == "False" %>
+                <div class="alert supressed">Alert Suppressed <%= time_ago_in_words(c.created_at) %> ago</div>
+            <% else %>
+                <div class="alert sent">Alert Sent <%= time_ago_in_words(c.created_at) %> ago</div>
+            <% end %>
+        </div>
+    </div>
+    <% if c.forecast == "Current" %>
+        <div class="observed-time">Weather <%= c.observation_time %></div>
+    <% else %>
+        <div class="observed-time">Forecasted Weather for <%= c.observation_time %></div>
+    <% end %>
     
-</table>
+    </li>
+    <% end %>
+</ul>
+    
+
 
     
