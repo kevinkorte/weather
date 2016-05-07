@@ -12,17 +12,22 @@ li {
 }
 li.suppressed {
 	background: #E8EFF5;
+	& img {
+		-webkit-filter: grayscale(0.5);
+	}
 }
+
 .forecast {
-	text-align: center;
-	text-transform: capitalize;
 	padding-top: 9px;
-	font-weight: 300;
-	color: #375065;
-	& span {
+	text-align: right;
+	
+	& .time-ago {
 		border: 1px solid #D2DDE6;
 		padding: 6px 15px;
-		border-radius: 6px
+		border-radius: 6px;
+		text-transform: capitalize;
+		font-weight: 300;
+		color: #375065;
 	}
 }
 .flex {
@@ -49,6 +54,7 @@ li.suppressed {
 .weather {
 	font-size: 12px;
 	font-style: italic;
+	color: #72899C;
 }
 .observed-time {
 	display: flex;

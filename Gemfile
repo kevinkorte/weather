@@ -26,6 +26,7 @@ gem 'json', '~> 1.8', '>= 1.8.3'
 gem 'httparty', '~> 0.13.7'
 gem 'sendgrid', '~> 1.2', '>= 1.2.4'
 gem 'sendgrid-ruby', '~> 1.1', '>= 1.1.6'
+gem 'local_time'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
