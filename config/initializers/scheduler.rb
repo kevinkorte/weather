@@ -1,6 +1,6 @@
 scheduler = Rufus::Scheduler.new
 
-scheduler.every '20s' do
+scheduler.every '29m' do
     res = HTTParty.get(ENV['CURRENT_WEATHER_API'])
     #if res['current_observation']['wind_mph'] > 5
     weather = Condition.create(
