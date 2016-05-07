@@ -2,7 +2,7 @@ scheduler = Rufus::Scheduler.new
 
 scheduler.every '29m' do
     res = HTTParty.get(ENV['CURRENT_WEATHER_API'])
-    #if res['current_observation']['wind_mph'] > 5
+    if res['current_observation']['wind_mph'] >= 10
     weather = Condition.create(
         weather: res['current_observation']['weather'],
         wind_string: res['current_observation']['wind_string'],
@@ -18,10 +18,9 @@ scheduler.every '29m' do
         forecast: "Current"
     )
     condition = Condition.where(forecast: "Current", sent: "True").last
-    UserNotifier.send_current_text(weather).deliver_now
     if condition.present?
         last_sent = condition.created_at
-        adjusted_time = last_sent + 1.hour
+        adjusted_time = last_sent + 6.hour
         if adjusted_time < Time.now.utc
             #night is today's date at 10pm UTC time
             night = Time.new(Date.today.year, Date.today.month, Date.today.day, 22,0,0).utc
@@ -40,9 +39,9 @@ scheduler.every '29m' do
     end
 end
 
-scheduler.every '2h' do 
+scheduler.every '1.9h' do 
     res = HTTParty.get(ENV['FORECASTED_WEATHER_API'])
-    weather = res['hourly_forecast'].select{|weather| weather['wspd']['english'].to_i > 9}.first
+    weather = res['hourly_forecast'].select{|weather| weather['wspd']['english'].to_i >= 10}.first
     @weather = Condition.create(
                 weather: weather['condition'],
                 wind_string: "Forecasted " + weather['wdir']['dir'] + " winds blowing " + weather['wspd']['english'] + " mph at " + weather['FCTTIME']['weekday_name'] + " " + weather['FCTTIME']['pretty'],
@@ -58,7 +57,6 @@ scheduler.every '2h' do
                 forecast: "Forecasted"
             )
     condition = Condition.where(forecast: "Forecasted", sent: "True").last
-    UserNotifier.send_forecasted_text(@weather).deliver_now
     if condition.present?
         last_sent = condition.created_at
         adjusted_time = last_sent + 6.hour
