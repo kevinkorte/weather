@@ -1,6 +1,6 @@
 scheduler = Rufus::Scheduler.new
 
-scheduler.every '2m' do
+scheduler.every '31m' do
     res = HTTParty.get(ENV['CURRENT_WEATHER_API'])
     if res['current_observation']['wind_mph'] >= 10
         weather = Condition.create(
@@ -40,7 +40,7 @@ scheduler.every '2m' do
     end
 end
 
-scheduler.every '2.5m' do 
+scheduler.every '3.9h' do 
     res = HTTParty.get(ENV['FORECASTED_WEATHER_API'])
     weather = res['hourly_forecast'].select{|weather| weather['wspd']['english'].to_i >= 10}.first
     if weather.present?
@@ -79,4 +79,9 @@ scheduler.every '2.5m' do
             c.update(sent: "True")
         end
     end
+end
+
+scheduler.cron '00 00 * * *' do
+    condition = Condition.where(created_at: (Time.now.midnight - 1.day)..Time.now.end_of_day - 1.day).last
+    condition.update(day_marker: "True")
 end
