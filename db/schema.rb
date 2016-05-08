@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505144607) do
+ActiveRecord::Schema.define(version: 20160508011750) do
 
   create_table "conditions", force: :cascade do |t|
     t.string   "weather"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20160505144607) do
     t.datetime "updated_at",       null: false
     t.string   "sent"
     t.string   "forecast"
+    t.string   "day_marker"
   end
 
 end

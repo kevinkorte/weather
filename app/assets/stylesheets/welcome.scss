@@ -3,15 +3,40 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 body { font-family: 'Source Sans Pro', sans-serif; }
 h1 { text-align: center}
+.divider {
+	margin: 20px auto;
+	position: relative;
+	//border-bottom: 1px solid black;
+	text-align: center;
+	margin-bottom: 20px;
+	max-width: 1100px;
+	& hr {
+		margin: 0;
+		position: absolute;
+		width: 100%;
+		top: 10px;
+		z-index: -10;
+		border-top: 1px solid #D9D9D9;
+		border-bottom: 1px solid white;
+	}
+}
+.today {
+    background: white;
+    padding: 4px 14px;
+}
+ul {
+	margin: 0;
+	padding: 0;
+}
 li {
 	list-style: none;
 	padding: 6px 8px;
-	border-top: 1px solid #D6DEE4;
 	max-width: 980px;
 	margin: 0 auto;
 }
 li.suppressed {
 	background: #E8EFF5;
+	border-top: 1px solid #D6DEE4;
 	& img {
 		-webkit-filter: grayscale(0.5);
 	}

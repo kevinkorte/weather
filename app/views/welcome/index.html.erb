@@ -1,7 +1,24 @@
 <h1>Titan Homes Wind Tracker</h1>
 
 <ul>
+<div class="divider">
+    <hr>
+    <span class="today">Today</span>
+</div>
     <% @conditions.each do |c| %>
+    <% if c.day_marker == "True" %>
+        <% if c.created_at < 7.days.ago %>
+            <div class="divider">
+                <hr>
+                <span class="today"><%= c.created_at.localtime.strftime("%B %y, %Y") %></span>
+            </div>
+        <% else %>
+            <div class="divider">
+                <hr>
+                <span class="today"><%= c.created_at.localtime.strftime("%A") %></span>
+            </div>
+        <% end %>
+    <% end %>
     <% if c.sent =="False" %>
     <li class="suppressed">
     <% else %>
@@ -30,7 +47,7 @@
             <% if c.sent == "False" %>
                 <div class="alert supressed">Alert Suppressed at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
             <% else %>
-                <div class="alert sent">Alert Sent at <%= c.created_at.strftime("%I:%M%P") %></div>
+                <div class="alert sent">Alert Sent at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
             <% end %>
         </div>
     </div>
