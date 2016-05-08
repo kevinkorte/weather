@@ -83,5 +83,7 @@ end
 
 scheduler.cron '00 00 * * *' do
     condition = Condition.where(created_at: (Time.now.midnight - 1.day)..Time.now.end_of_day - 1.day).last
-    condition.update(day_marker: "True")
+    if condition.present?
+        condition.update(day_marker: "True")
+    end
 end
