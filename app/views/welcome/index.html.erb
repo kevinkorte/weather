@@ -20,9 +20,9 @@
         <% end %>
     <% end %>
     <% if c.sent =="False" %>
-    <li class="suppressed">
+    <li class="muted">
     <% else %>
-    <li class="sent">
+    <li class="loud">
     <% end %>
     <div class="forecast">
         <span class="time-ago"><%= c.forecast %> <%= local_time_ago(c.created_at) %></span>

@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 body { font-family: 'Source Sans Pro', sans-serif; }
 h1 { text-align: center}
-.divider + li.sent {
+.divider + li.loud {
 	border-top: none;
 }
 .divider {
@@ -38,11 +38,15 @@ li {
 	margin: 0 auto;
 	border-top: 1px solid #D6DEE4;
 }
-li.suppressed {
+li.muted {
 	background: #E8EFF5;
+	font-size: 0.95em;
 	& img {
 		-webkit-filter: grayscale(0.5);
 	}
+}
+li.loud .weather-string{
+	font-size: 1.3em;
 }
 
 .forecast {
@@ -71,9 +75,15 @@ li.suppressed {
 	justify-content: space-between;
 	width: 100%;
 }
+.loud .weather-string {
+	color: #080408;
+}
 .weather-string,
 .temperature-string {
 	color: #777A7D;
+}
+.muted .forecasted.weather-string {
+	color: #6B8694;
 }
 .forecasted.weather-string {
 	font-weight: bold;
