@@ -3,6 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 body { font-family: 'Source Sans Pro', sans-serif; }
 h1 { text-align: center}
+.divider + li.sent {
+	border-top: none;
+}
 .divider {
 	margin: 20px auto;
 	position: relative;
@@ -33,10 +36,10 @@ li {
 	padding: 6px 8px;
 	max-width: 980px;
 	margin: 0 auto;
+	border-top: 1px solid #D6DEE4;
 }
 li.suppressed {
 	background: #E8EFF5;
-	border-top: 1px solid #D6DEE4;
 	& img {
 		-webkit-filter: grayscale(0.5);
 	}

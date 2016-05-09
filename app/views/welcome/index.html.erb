@@ -22,7 +22,7 @@
     <% if c.sent =="False" %>
     <li class="suppressed">
     <% else %>
-    <li>
+    <li class="sent">
     <% end %>
     <div class="forecast">
         <span class="time-ago"><%= c.forecast %> <%= local_time_ago(c.created_at) %></span>
