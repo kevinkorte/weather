@@ -1,13 +1,32 @@
 <h1>Titan Homes Wind Tracker</h1>
 
 <ul>
+<div class="divider">
+    <hr>
+    <span class="today">Today</span>
+</div>
     <% @conditions.each do |c| %>
-    <% if c.sent =="False" %>
-    <li class="suppressed">
-    <% else %>
-    <li>
+    <% if c.day_marker == "True" %>
+        <% if c.created_at < 7.days.ago %>
+            <div class="divider">
+                <hr>
+                <span class="today"><%= c.created_at.localtime.strftime("%B %y, %Y") %></span>
+            </div>
+        <% else %>
+            <div class="divider">
+                <hr>
+                <span class="today"><%= c.created_at.localtime.strftime("%A") %></span>
+            </div>
+        <% end %>
     <% end %>
-    <div class="forecast"><span><%= c.forecast %> Weather</span></div>
+    <% if c.sent =="False" %>
+    <li class="muted">
+    <% else %>
+    <li class="loud">
+    <% end %>
+    <div class="forecast">
+        <span class="time-ago"><%= c.forecast %> <%= local_time_ago(c.created_at) %></span>
+    </div>
     <div class="flex">
         <div class="icon">
             <img src="<%= c.icon_url %>">
@@ -26,9 +45,9 @@
                 <% end %>
             </div>
             <% if c.sent == "False" %>
-                <div class="alert supressed">Alert Suppressed <%= time_ago_in_words(c.created_at) %> ago</div>
+                <div class="alert supressed">Alert Suppressed at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
             <% else %>
-                <div class="alert sent">Alert Sent <%= time_ago_in_words(c.created_at) %> ago</div>
+                <div class="alert sent">Alert Sent at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
             <% end %>
         </div>
     </div>
@@ -41,7 +60,4 @@
     </li>
     <% end %>
 </ul>
-    
-
-
     

@@ -3,26 +3,63 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 body { font-family: 'Source Sans Pro', sans-serif; }
 h1 { text-align: center}
+.divider + li.loud {
+	border-top: none;
+}
+.divider {
+	margin: 20px auto;
+	position: relative;
+	//border-bottom: 1px solid black;
+	text-align: center;
+	margin-bottom: 20px;
+	max-width: 1100px;
+	& hr {
+		margin: 0;
+		position: absolute;
+		width: 100%;
+		top: 10px;
+		z-index: -10;
+		border-top: 1px solid #D9D9D9;
+		border-bottom: 1px solid white;
+	}
+}
+.today {
+    background: white;
+    padding: 4px 14px;
+}
+ul {
+	margin: 0;
+	padding: 0;
+}
 li {
 	list-style: none;
 	padding: 6px 8px;
-	border-top: 1px solid #D6DEE4;
 	max-width: 980px;
 	margin: 0 auto;
+	border-top: 1px solid #D6DEE4;
 }
-li.suppressed {
+li.muted {
 	background: #E8EFF5;
+	font-size: 0.95em;
+	& img {
+		-webkit-filter: grayscale(0.5);
+	}
 }
+li.loud .weather-string{
+	font-size: 1.3em;
+}
+
 .forecast {
-	text-align: center;
-	text-transform: capitalize;
 	padding-top: 9px;
-	font-weight: 300;
-	color: #375065;
-	& span {
+	text-align: right;
+	
+	& .time-ago {
 		border: 1px solid #D2DDE6;
 		padding: 6px 15px;
-		border-radius: 6px
+		border-radius: 6px;
+		text-transform: capitalize;
+		font-weight: 300;
+		color: #375065;
 	}
 }
 .flex {
@@ -38,9 +75,15 @@ li.suppressed {
 	justify-content: space-between;
 	width: 100%;
 }
+.loud .weather-string {
+	color: #080408;
+}
 .weather-string,
 .temperature-string {
 	color: #777A7D;
+}
+.muted .forecasted.weather-string {
+	color: #6B8694;
 }
 .forecasted.weather-string {
 	font-weight: bold;
@@ -49,6 +92,7 @@ li.suppressed {
 .weather {
 	font-size: 12px;
 	font-style: italic;
+	color: #72899C;
 }
 .observed-time {
 	display: flex;

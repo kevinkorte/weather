@@ -22,4 +22,6 @@ test:
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: weather_production
+  username: rails
+  password: <%= ENV['APP_DATABASE_PASSWORD'] %>

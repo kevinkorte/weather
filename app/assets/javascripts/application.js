@@ -13,4 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require moment.min
+//= require local_time
 //= require_tree .
