@@ -48,7 +48,11 @@ li.muted {
 li.loud .weather-string{
 	font-size: 1.3em;
 }
-
+.no-updates-today {
+	text-align: center;
+	color: #9CA9B5;
+	font-style: italic;
+}
 .forecast {
 	padding-top: 9px;
 	text-align: right;

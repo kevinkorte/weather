@@ -1,63 +1,77 @@
 <h1>Titan Homes Wind Tracker</h1>
 
 <ul>
-<div class="divider">
-    <hr>
-    <span class="today">Today</span>
-</div>
-    <% @conditions.each do |c| %>
-    <% if c.day_marker == "True" %>
-        <% if c.created_at < 7.days.ago %>
-            <div class="divider">
-                <hr>
-                <span class="today"><%= c.created_at.localtime.strftime("%B %y, %Y") %></span>
-            </div>
-        <% else %>
-            <div class="divider">
-                <hr>
-                <span class="today"><%= c.created_at.localtime.strftime("%A") %></span>
-            </div>
-        <% end %>
-    <% end %>
-    <% if c.sent =="False" %>
-    <li class="muted">
-    <% else %>
+    <div class="divider">
+        <hr>
+        <span class="today">Today</span>
+    </div>
+
+    <% if @last_condition.created_at.end_of_day <= Time.now.utc %>
     <li class="loud">
-    <% end %>
-    <div class="forecast">
-        <span class="time-ago"><%= c.forecast %> <%= local_time_ago(c.created_at) %></span>
-    </div>
-    <div class="flex">
-        <div class="icon">
-            <img src="<%= c.icon_url %>">
-        </div>
-        <div class="weather-description-container">
-            <div class="center">
-                <div class="weather"><%= c.weather %></div>
-                <%if c.forecast == "Forecasted" %>
-                    <div class="forecasted weather-string"><%= c.wind_string %></div>
-                <% else %>
-                    <div class="weather-string"><%= c.wind_string %></div>
-                <% end %>
-                
-                <% if c.forecast == "Current" %>
-                <div class="temperature-string"><%= c.temp_f %> and feels like <%= c.feelslike_f %></div>
-                <% end %>
-            </div>
-            <% if c.sent == "False" %>
-                <div class="alert supressed">Alert Suppressed at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
-            <% else %>
-                <div class="alert sent">Alert Sent at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
-            <% end %>
-        </div>
-    </div>
-    <% if c.forecast == "Current" %>
-        <div class="observed-time">Weather <%= c.observation_time %></div>
-    <% else %>
-        <div class="observed-time">Forecasted Weather for <%= c.observation_time %></div>
-    <% end %>
-    
+        <p class="no-updates-today">All is calm - no alerts yet today</p>
     </li>
+    <% end %>
+
+    <% @conditions.each do |c| %>   
+        <% if c.day_marker == "True" %>
+            <% if c.created_at < 7.days.ago %>
+                <div class="divider">
+                    <hr>
+                    <span class="today"><%= c.created_at.localtime.strftime("%B %y, %Y") %></span>
+                </div>
+            <% else %>
+                <div class="divider">
+                    <hr>
+                    <span class="today"><%= c.created_at.localtime.strftime("%A") %></span>
+                </div>
+            <% end # ends check if this condition was created more than 7 days ago %> 
+        <% end # ends check if day_marker is true %>
+        <% if c.isEmpty == "True" %>
+            <li class="loud">
+                <p class="no-updates-today">All is calm - no alerts for <%= c.created_at.localtime.strftime("%B %y, %Y") %></p>
+            </li>
+        <% else %>
+            <% if c.sent =="False" %>
+                <li class="muted">
+            <% else %>
+                <li class="loud">
+            <% end %>
+            <div class="forecast">
+                <span class="time-ago"><%= c.forecast %> <%= local_time_ago(c.created_at) %></span>
+            </div>
+            <div class="flex">
+                <div class="icon">
+                    <img src="<%= c.icon_url %>">
+                </div>
+                <div class="weather-description-container">
+                    <div class="center">
+                        <div class="weather"><%= c.weather %></div>
+                        <%if c.forecast == "Forecasted" %>
+                            <div class="forecasted weather-string"><%= c.wind_string %></div>
+                        <% else %>
+                            <div class="weather-string"><%= c.wind_string %></div>
+                        <% end %>
+                        
+                        <% if c.forecast == "Current" %>
+                        <div class="temperature-string"><%= c.temp_f %> and feels like <%= c.feelslike_f %></div>
+                        <% end %>
+                    </div>
+                    <% if c.sent == "False" %>
+                        <div class="alert supressed">Alert Suppressed at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
+                    <% else %>
+                        <div class="alert sent">Alert Sent at <%= c.created_at.localtime.strftime("%I:%M%P") %></div>
+                    <% end %>
+                </div>
+            </div>
+            <% if c.forecast == "Current" %>
+                <div class="observed-time">Weather <%= c.observation_time %></div>
+            <% else %>
+                <div class="observed-time">Forecasted Weather for <%= c.observation_time %></div>
+            <% end %>
+            
+            </li>
+            <% end %>
+        </end>
     <% end %>
 </ul>
     

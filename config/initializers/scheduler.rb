@@ -15,7 +15,9 @@ scheduler.every '31m' do
             icon_url: res['current_observation']['icon_url'],
             observation_time: res['current_observation']['observation_time'],
             sent: "False",
-            forecast: "Current"
+            forecast: "Current",
+            day_marker: "False",
+            isEmpty: "False"
         )
         condition = Condition.where(forecast: "Current", sent: "True").last
         if condition.present?
@@ -57,7 +59,9 @@ scheduler.every '3.9h' do
                     icon_url: weather['icon_url'],
                     observation_time: weather['FCTTIME']['pretty'],
                     sent: "False",
-                    forecast: "Forecasted"
+                    forecast: "Forecasted",
+                    day_marker: "False",
+                    isEmpty: "False"
                 )
         condition = Condition.where(forecast: "Forecasted", sent: "True").last
         if condition.present?
@@ -86,5 +90,11 @@ scheduler.cron '00 00 * * *' do
     condition = Condition.where(created_at: (Time.now.midnight - 1.day)..Time.now.end_of_day - 1.day).last
     if condition.present?
         condition.update(day_marker: "True")
+    else
+        Condition.create(
+                day_marker: "True",
+                isEmpty: "True",
+                created_at: Time.now.utc.noon.yesterday
+            )
     end
 end
