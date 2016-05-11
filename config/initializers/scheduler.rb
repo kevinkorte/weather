@@ -42,40 +42,44 @@ scheduler.every '29m' do
     end
 end
 
-scheduler.every '1.8h' do
+scheduler.every '37m' do
     res = HTTParty.get(ENV['FORECASTED_WEATHER_API'])
-
     weather = res['hourly_forecast'].select{|weather| weather['wspd']['english'].to_i >= 10}.first
     if weather.present?
-        @weather = Condition.create(
-                    weather: weather['condition'],
-                    wind_string: "Forecasted " + weather['wdir']['dir'] + " winds blowing " + weather['wspd']['english'] + " mph at " + weather['FCTTIME']['weekday_name'] + " " + weather['FCTTIME']['pretty'],
-                    wind_dir: weather['wdir']['dir'],
-                    wind_mph: weather['wspd']['english'],
-                    wind_gust_mph: "Unavailable",
-                    temp_f: weather['temp']['english'],
-                    feelslike_f: weather['feelslike']['english'],
-                    precip_today_in: "Unavailable",
-                    icon_url: weather['icon_url'],
-                    observation_time: weather['FCTTIME']['pretty'],
-                    sent: "False",
-                    forecast: "Forecasted",
-                    day_marker: "False",
-                    isEmpty: "False"
+        last_forecast = Condition.where(forecast: "Forecasted").last
+        if last_forecast.present?
+            current_weather_string = "Forecasted " + weather['wdir']['dir'] + " winds blowing " + weather['wspd']['english'] + " mph at " + weather['FCTTIME']['weekday_name'] + " " + weather['FCTTIME']['pretty']
+            past_weather_string = last_forecast.wind_string
+            if current_weather_string != past_weather_string
+                @weather = Condition.create(
+                            weather: weather['condition'],
+                            wind_string: "Forecasted " + weather['wdir']['dir'] + " winds blowing " + weather['wspd']['english'] + " mph at " + weather['FCTTIME']['weekday_name'] + " " + weather['FCTTIME']['pretty'],
+                            wind_dir: weather['wdir']['dir'],
+                            wind_mph: weather['wspd']['english'],
+                            wind_gust_mph: "Unavailable",
+                            temp_f: weather['temp']['english'],
+                            feelslike_f: weather['feelslike']['english'],
+                            precip_today_in: "Unavailable",
+                            icon_url: weather['icon_url'],
+                            observation_time: weather['FCTTIME']['pretty'],
+                            sent: "False",
+                            forecast: "Forecasted",
+                            day_marker: "False",
+                            isEmpty: "False"
                 )
-        condition = Condition.where(forecast: "Forecasted", sent: "True").last
-        if condition.present?
-            last_sent = condition.created_at
-            adjusted_time = last_sent + 6.hour
-            if adjusted_time < Time.now.utc
-                #night is today's date at 10pm UTC time
-                night = Time.new(Date.today.year, Date.today.month, Date.today.day, 22,0,0).utc
-                #morning is today's date at 6am UTC time
-                morning = Time.new(Date.today.year, Date.today.month, Date.today.day, 6,0,0).utc
-                if Time.now.utc > morning && Time.now.utc < night
-                    UserNotifier.send_forecasted_text(@weather).deliver_now
-                    c = Condition.where(forecast: "Forecasted").last
-                    c.update(sent: "True")
+                condition = Condition.where(forecast: "Forecasted", sent: "True").last
+                last_sent = condition.created_at
+                adjusted_time = last_sent + 6.hour
+                if adjusted_time < Time.now.utc
+                    #night is today's date at 10pm UTC time
+                    night = Time.new(Date.today.year, Date.today.month, Date.today.day, 22,0,0).utc
+                    #morning is today's date at 6am UTC time
+                    morning = Time.new(Date.today.year, Date.today.month, Date.today.day, 6,0,0).utc
+                    if Time.now.utc > morning && Time.now.utc < night
+                        UserNotifier.send_forecasted_text(@weather).deliver_now
+                        c = Condition.where(forecast: "Forecasted").last
+                        c.update(sent: "True")
+                    end
                 end
             end
         else
