@@ -17,7 +17,7 @@
             <% if c.created_at < 7.days.ago %>
                 <div class="divider">
                     <hr>
-                    <span class="today"><%= c.created_at.localtime.strftime("%B %y, %Y") %></span>
+                    <span class="today"><%= c.created_at.localtime.strftime("%B %d, %Y") %></span>
                 </div>
             <% else %>
                 <div class="divider">
@@ -28,7 +28,7 @@
         <% end # ends check if day_marker is true %>
         <% if c.isEmpty == "True" %>
             <li class="loud">
-                <p class="no-updates-today">All is calm - no alerts for <%= c.created_at.localtime.strftime("%B %y, %Y") %></p>
+                <p class="no-updates-today">All is calm - no alerts for <%= c.created_at.localtime.strftime("%B %d, %Y") %></p>
             </li>
         <% else %>
             <% if c.sent =="False" %>
