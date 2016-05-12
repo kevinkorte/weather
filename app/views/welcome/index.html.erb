@@ -6,7 +6,7 @@
         <span class="today">Today</span>
     </div>
 
-    <% if @last_condition.created_at.end_of_day <= Time.now.utc %>
+    <% if @last_condition.created_at.localtime.end_of_day <= Time.now %>
     <li class="loud">
         <p class="no-updates-today">All is calm - no alerts yet today</p>
     </li>

@@ -1,6 +1,6 @@
 scheduler = Rufus::Scheduler.new
 
-scheduler.every '29m' do
+scheduler.every '23m' do
     res = HTTParty.get(ENV['CURRENT_WEATHER_API'])
     if res['current_observation']['wind_mph'] >= 10
         weather = Condition.create(
@@ -39,10 +39,13 @@ scheduler.every '29m' do
             c = Condition.where(forecast: "Current").last
             c.update(sent: "True")
         end
+    else
+        puts "Current winds are not fast enough"
+        puts Time.now
     end
 end
 
-scheduler.every '37m' do
+scheduler.every '33m' do
     res = HTTParty.get(ENV['FORECASTED_WEATHER_API'])
     weather = res['hourly_forecast'].select{|weather| weather['wspd']['english'].to_i >= 10}.first
     if weather.present?
@@ -51,6 +54,8 @@ scheduler.every '37m' do
             current_weather_string = "Forecasted " + weather['wdir']['dir'] + " winds blowing " + weather['wspd']['english'] + " mph at " + weather['FCTTIME']['weekday_name'] + " " + weather['FCTTIME']['pretty']
             past_weather_string = last_forecast.wind_string
             if current_weather_string != past_weather_string
+                puts "The Weather forecast is different! I'm saving this one."
+                puts Time.now
                 @weather = Condition.create(
                             weather: weather['condition'],
                             wind_string: "Forecasted " + weather['wdir']['dir'] + " winds blowing " + weather['wspd']['english'] + " mph at " + weather['FCTTIME']['weekday_name'] + " " + weather['FCTTIME']['pretty'],
@@ -81,6 +86,9 @@ scheduler.every '37m' do
                         c.update(sent: "True")
                     end
                 end
+            else
+                puts "The weather forecast hasn't changed"
+                puts Time.now
             end
         else
             UserNotifier.send_forecasted_text(@weather).deliver_now
