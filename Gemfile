@@ -23,7 +23,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'rufus-scheduler', '~> 3.2'
 gem 'json', '~> 1.8', '>= 1.8.3'
-gem 'httparty', '~> 0.13.7'
+gem 'httparty'
 gem 'sendgrid', '~> 1.2', '>= 1.2.4'
 gem 'sendgrid-ruby', '~> 1.1', '>= 1.1.6'
 gem 'local_time'
@@ -58,4 +58,3 @@ group :production do
   gem 'thin'
   gem 'unicorn'
 end
-
