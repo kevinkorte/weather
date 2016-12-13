@@ -58,12 +58,12 @@ scheduler.every '7m' do #23m
                     )
                     puts "created an event, but did not send an email"
                 end
-        
+
             else
                 puts "no need to save or alert on this event"
             end
         end
-        
+
         # adjusted_time = last_sent + 10.minutes # 6.hour
         #     if adjusted_time < Time.now.utc
         #     #night is today's date at 10pm UTC time
@@ -158,6 +158,71 @@ scheduler.every '2h' do
             c.update(sent: "True")
         end
     end
+end
+
+scheduler.every '30s' do
+  res = HTTParty.get(ENV['ALERT_WEATHER_API']);
+  if res['response']['features']['alerts'] >= 1
+    last_saved_alert = Condition.where(forecast: "Alert").last
+    last_sent_alert = Condition.where(forecast: "Alert", sent: "True").last
+    if last_saved_alert.present? && last_sent_alert.present?
+      last_saved_alert_time = last_saved_alert.created_at
+      last_sent_alert_time = last_sent_alert.created_at
+      alert_adjusted_time = last_sent_alert_time + 3.minute
+      if alert_adjusted_time < Time.now.utc
+        puts "Haven't sent an email lately"
+        night = Time.new(Date.today.year, Date.today.month, Date.today.day, 22,0,0).utc
+        morning = Time.new(Date.today.year, Date.today.month, Date.today.day, 6,0,0).utc
+        if Time.now.utc > morning && Time.now.utc < night
+          puts "it's a good time to alert"
+          @alert = Condition.create(
+            weather: res['alerts'][0]['description'],
+            alert_message: res['alerts'][0]['message'],
+            alert_start_date: res['alerts'][0]['date'],
+            alert_expire_date: res['alerts'][0]['expires'],
+            sent: "False",
+            forecast: "Alert",
+            day_marker: "False",
+            isEmpty: "False"
+          )
+          puts 'sending email'
+          UserNotifier.send_alert_text(@alert).deliver_now
+          a = Condition.where(forecast: "Alert").last
+          a.update(sent: "True")
+          UserNotifier.send_alert_email(@alert).deliver_now
+        end
+      else
+        @alert = Condition.create(
+          weather: res['alerts'][0]['description'],
+          alert_message: res['alerts'][0]['message'],
+          alert_start_date: res['alerts'][0]['date'],
+          alert_expire_date: res['alerts'][0]['expires'],
+          sent: "False",
+          forecast: "Alert",
+          day_marker: "False",
+          isEmpty: "False"
+        )
+        puts "Created an alert but did not save"
+      end
+    else
+      @alert = Condition.create(
+        weather: res['alerts'][0]['description'],
+        alert_message: res['alerts'][0]['message'],
+        alert_start_date: res['alerts'][0]['date'],
+        alert_expire_date: res['alerts'][0]['expires'],
+        sent: "False",
+        forecast: "Alert",
+        day_marker: "False",
+        isEmpty: "False"
+      )
+      puts 'sending email'
+      UserNotifier.send_alert_text(@alert).deliver_now
+      a = Condition.where(forecast: "Alert").last
+      a.update(sent: "True")
+      UserNotifier.send_alert_email(@alert).deliver_now
+      puts "Creating a first Event of this type"
+    end
+  end
 end
 
 scheduler.cron '00 00 * * *' do
