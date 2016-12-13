@@ -27,6 +27,7 @@ gem 'httparty'
 gem 'sendgrid', '~> 1.2', '>= 1.2.4'
 gem 'sendgrid-ruby', '~> 1.1', '>= 1.1.6'
 gem 'local_time'
+gem 'newrelic_rpm'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
