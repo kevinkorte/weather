@@ -127,17 +127,13 @@ scheduler.every '2h' do
                             UserNotifier.send_forecasted_text(@weather).deliver_now
                             c = Condition.where(forecast: "Forecasted").last
                             c.update(sent: "True")
-                        end
-                    end
-                else
+                        end #if it's during the day
+                    end # if we haven't sent one in awhile
+                else # if the weather hasn't changed
                     puts "The weather forecast hasn't changed"
                     puts Time.now
                 end
             #end
-        else
-            UserNotifier.send_forecasted_text(@weather).deliver_now
-            c = Condition.where(forecast: "Forecasted").last
-            c.update(sent: "True")
         else
           @weather = Condition.create(
                       weather: weather['condition'],
