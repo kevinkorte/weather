@@ -155,7 +155,7 @@ scheduler.every '2h' do
     end #ends if we have something
 end #ends scheduler
 
-scheduler.every '30s' do
+scheduler.every '3h' do
   res = HTTParty.get(ENV['ALERT_WEATHER_API']);
   if res['response']['features']['alerts'] >= 1
     last_saved_alert = Condition.where(forecast: "Alert").last
@@ -163,7 +163,7 @@ scheduler.every '30s' do
     if last_saved_alert.present? && last_sent_alert.present?
       last_saved_alert_time = last_saved_alert.created_at
       last_sent_alert_time = last_sent_alert.created_at
-      alert_adjusted_time = last_sent_alert_time + 3.minute
+      alert_adjusted_time = last_sent_alert_time + 6.hours
       if alert_adjusted_time < Time.now.utc
         puts "Haven't sent an email lately"
         night = Time.new(Date.today.year, Date.today.month, Date.today.day, 22,0,0).utc

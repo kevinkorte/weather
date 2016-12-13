@@ -23,7 +23,7 @@ class UserNotifier < ApplicationMailer
 
   def send_alert_email(alert)
     @alert = alert
-    @user = ENV['CONTACTS_ALERT']
+    @user = ENV['CONTACTS_ALERT_EMAIL']
     mail( :to => @user, :subject => @alert.weather)
   end
 end
