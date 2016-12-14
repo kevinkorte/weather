@@ -119,8 +119,9 @@ scheduler.every '1h' do
                     )
                     condition = Condition.where(forecast: "Forecasted", sent: "True").last
                     last_sent = condition.created_at
-                    adjusted_time = last_sent + 6.hour
-                    if adjusted_time < Time.now.utc
+                    if last_sent.present?
+                      adjusted_time = last_sent + 6.hour
+                      if adjusted_time < Time.now.utc
                         #night is today's date at 10pm UTC time
                         night = Time.new(Date.today.year, Date.today.month, Date.today.day, 22,0,0).utc
                         #morning is today's date at 6am UTC time
@@ -130,7 +131,17 @@ scheduler.every '1h' do
                             c = Condition.where(forecast: "Forecasted").last
                             c.update(sent: "True")
                         end #if it's during the day
-                    end # if we haven't sent one in awhile
+                      end # if we haven't sent one in awhile
+                    else
+                      night = Time.new(Date.today.year, Date.today.month, Date.today.day, 22,0,0).utc
+                      #morning is today's date at 6am UTC time
+                      morning = Time.new(Date.today.year, Date.today.month, Date.today.day, 6,0,0).utc
+                      if Time.now.utc > morning && Time.now.utc < night
+                          UserNotifier.send_forecasted_text(@weather).deliver_now
+                          c = Condition.where(forecast: "Forecasted").last
+                          c.update(sent: "True")
+                      end #if it's during the day
+                    end
                 else # if the weather hasn't changed
                     puts "The weather forecast hasn't changed"
                     puts Time.now
