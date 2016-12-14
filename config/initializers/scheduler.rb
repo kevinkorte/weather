@@ -86,7 +86,7 @@ scheduler.every '7m' do #23m
     end
 end
 
-scheduler.every '2h' do
+scheduler.every '1h' do
     res = HTTParty.get(ENV['FORECASTED_WEATHER_API'])
     weather = res['hourly_forecast'].select{|weather| weather['wspd']['english'].to_i >= 10}.first
     if weather.present?
@@ -95,6 +95,8 @@ scheduler.every '2h' do
         if last_forecast.present?
             current_weather_string = "Forecasted " + weather['wdir']['dir'] + " winds blowing " + weather['wspd']['english'] + " mph at " + weather['FCTTIME']['weekday_name'] + " " + weather['FCTTIME']['pretty']
             past_weather_string = last_forecast.wind_string
+            puts past_weather_string
+            puts last_forecast.wind_string
             #if check_forecast(conditions, current_weather_string)
                 if current_weather_string != past_weather_string
                     puts "The Weather forecast is different! I'm saving this one."
