@@ -86,7 +86,7 @@ scheduler.every '7m' do #23m
     end
 end
 
-scheduler.every '1h' do
+scheduler.every '51m' do
     res = HTTParty.get(ENV['FORECASTED_WEATHER_API'])
     weather = res['hourly_forecast'].select{|weather| weather['wspd']['english'].to_i >= 10}.first
     if weather.present?
@@ -168,7 +168,7 @@ scheduler.every '1h' do
     end #ends if we have something
 end #ends scheduler
 
-scheduler.every '3h' do
+scheduler.every '179m' do
   res = HTTParty.get(ENV['ALERT_WEATHER_API']);
   if res['response']['features']['alerts'] >= 1
     last_saved_alert = Condition.where(forecast: "Alert").last
