@@ -2,7 +2,7 @@ scheduler = Rufus::Scheduler.new
 
 scheduler.every '7m' do #23m
     res = HTTParty.get(ENV['CURRENT_WEATHER_API'])
-    if res['current_observation']['wind_mph'] >= 3
+    if res['current_observation']['wind_mph'] >= 10
         last_saved_condition = Condition.where(forecast: "Current").last
         last_sent_condition = Condition.where(forecast: "Current", sent: "True").last
         if last_saved_condition.present? && last_sent_condition.present?
